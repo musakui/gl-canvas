@@ -1,0 +1,30 @@
+{
+  "name": "gl-canvas",
+  "version": "0.0.1",
+  "description": " A custom element wrapper around <canvas>",
+  "license": "MIT",
+  "author": "Shun Git",
+  "repository": "github:musakui/gl-canvas",
+  "main": "build/gl-canvas.js",
+  "module": "build/gl-canvas.esm.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "dev": "rollup --config --watch",
+    "lint": "eslint ./src",
+    "build": "rollup --config"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "rollup": "^2.0.5",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-terser": "^5.3.0"
+  },
+  "dependencies": {}
+}
