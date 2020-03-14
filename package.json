@@ -4,8 +4,15 @@
   "description": " A custom element wrapper around <canvas>",
   "license": "MIT",
   "author": "Shun Git",
+  "keywords": [
+    "gl",
+    "webgl",
+    "canvas",
+    "webcomponents",
+    "web-components"
+  ],
   "repository": "github:musakui/gl-canvas",
-  "main": "build/gl-canvas.js",
+  "main": "gl-canvas.js",
   "module": "build/gl-canvas.esm.js",
   "files": [
     "build"

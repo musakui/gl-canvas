@@ -5,14 +5,14 @@ import { terser } from 'rollup-plugin-terser'
 
 export default [
 	{
-		input: 'src/gl-canvas.js',
+		input: 'gl-canvas.js',
     plugins: [
       eslint({ throwOnError: true }),
       terser(),
     ],
 		output: [
-			{ format: 'cjs', file: pkg.main },
 			{ format: 'esm', file: pkg.module },
+			{ format: 'cjs', file: 'build/gl-canvas.min.js' },
 		]
 	}
 ]

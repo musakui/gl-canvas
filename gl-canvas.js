@@ -40,6 +40,9 @@ class ResizeEvent extends UIEvent {
   }
 }
 
+/**
+ * `<gl-canvas>` is a wrapper around `<canvas>` that handles the WebGL context and various events.
+ */
 export class GLCanvas extends HTMLElement {
   constructor () {
     super()
@@ -104,6 +107,10 @@ export class GLCanvas extends HTMLElement {
     return this._resizeObserver
   }
 
+  /**
+   * The width and height of the canvas after pixel scaling.
+   * @type {Array.<number>}
+   */
   get size () {
     return [
       this._canvas.clientWidth * this.pixelRatio,
@@ -111,6 +118,14 @@ export class GLCanvas extends HTMLElement {
     ]
   }
 
+  /**
+   * Setup function. Called on initialize and when WebGL context is restored.
+   * @callback setupFunction
+   * @param {?WebGLRenderingContext} gl - The current WebGL context.
+   * @param {?boolean} restored - Was context restored? null if setup was changed.
+   *
+   * @type {?setupFunction}
+   */
   get setup () {
     return this._setup
   }
@@ -120,6 +135,13 @@ export class GLCanvas extends HTMLElement {
     this._initGL(null)
   }
 
+  /**
+   * Animation loop function.
+   * @callback renderFunction
+   * @param {DOMHighResTimeStamp} time - Timestamp in milliseconds.
+   *
+   * @type {?renderFunction}
+   */
   get render () {
     return this._render
   }
@@ -131,6 +153,13 @@ export class GLCanvas extends HTMLElement {
     this._initRAF()
   }
 
+  /**
+   * Default handler for resize events.
+   * @callback resizeHandler
+   * @param {ResizeEvent} event
+   *
+   * @type {?resizeHandler}
+   */
   get onresize () {
     return this._resize
   }
@@ -147,6 +176,10 @@ export class GLCanvas extends HTMLElement {
     }
   }
 
+  /**
+   * Dispose function. Called when element is removed from the DOM.
+   * @type {?function}
+   */
   get dispose () {
     return this._dispose
   }
@@ -156,6 +189,10 @@ export class GLCanvas extends HTMLElement {
     this._dispose = (typeof v === 'function') ? v : null
   }
 
+  /**
+   * Pixel scaling of canvas. Default is `window.devicePixelRatio`.
+   * @type {number}
+   */
   get pixelRatio () {
     return this._pixelRatio
   }
@@ -164,6 +201,11 @@ export class GLCanvas extends HTMLElement {
     this._pixelRatio = parseFloat(v) || window.devicePixelRatio
   }
 
+  /**
+   * WebGL context attributes. Cannot be modified after the context has been retrieved.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext}
+   * @type {object}
+   */
   get contextAttributes () {
     return this._contextAttributes
   }
@@ -172,6 +214,10 @@ export class GLCanvas extends HTMLElement {
     Object.assign(this._contextAttributes, opts)
   }
 
+  /**
+   * The WebGL context. Attempts creation on first access.
+   * @type {?WebGLRenderingContext}
+   */
   get gl () {
     if (this._gl === null) {
       const gl = this._canvas.getContext('webgl', Object.freeze(this._contextAttributes))
@@ -183,6 +229,9 @@ export class GLCanvas extends HTMLElement {
     return this._gl
   }
 
+  /**
+   * Setup listeners and read contextAttributes from HTML attributes.
+   */
   connectedCallback () {
     this.constructor.resizeObserver.observe(this)
     this._canvas.addEventListener('webglcontextlost', this._ctxLost, false)
@@ -205,6 +254,9 @@ export class GLCanvas extends HTMLElement {
     this._initGL(false)
   }
 
+  /**
+   * Remove listeners and dispose
+   */
   disconnectedCallback () {
     this.constructor.resizeObserver.unobserve(this)
     this._canvas.removeEventListener('webglcontextlost', this._ctxLost, false)
@@ -213,6 +265,10 @@ export class GLCanvas extends HTMLElement {
     if (this.dispose !== null) { this.dispose() }
   }
 
+  /**
+   * Run setup code and initialize handlers.
+   * @private
+   */
   _initGL (restored) {
     if (this.setup === null || this.gl === null) { return }
     const opts = this.setup(this.gl, restored)
@@ -224,6 +280,10 @@ export class GLCanvas extends HTMLElement {
     this._initRAF()
   }
 
+  /**
+   * Start the animation loop.
+   * @private
+   */
   _initRAF () {
     if (this.render === null) { return }
     const render = (time) => {
@@ -234,6 +294,14 @@ export class GLCanvas extends HTMLElement {
     this._requestId = requestAnimationFrame(render)
   }
 
+  /**
+   * Create a Blob object representing the image shown in the canvas.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob}
+   * @param {string} [mimeType] - Image format. Default is `image/png`.
+   * @param {number} [qualityArgument] - A number between 0 and 1.
+   *
+   * @returns {Promise<Blob>} A `Promise` that resolves to the `Blob` object.
+   */
   toBlob (mimeType, qualityArgument) {
     return new Promise((resolve, reject) => {
       try {
@@ -244,6 +312,14 @@ export class GLCanvas extends HTMLElement {
     })
   }
 
+  /**
+   * Get a data URI representing the image shown in the canvas.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL}
+   * @param {string} [type] - Image format. Default is `image/png`.
+   * @param {number} [encoderOptions] - A number between 0 and 1.
+   *
+   * @returns {string} The data URI.
+   */
   toDataURL (type, encoderOptions) {
     return this._canvas.toDataURL(type, encoderOptions)
   }
