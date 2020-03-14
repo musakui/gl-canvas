@@ -1,6 +1,6 @@
 {
   "name": "gl-canvas",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": " A custom element wrapper around <canvas>",
   "license": "MIT",
   "author": "Shun Git",
