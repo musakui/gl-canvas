@@ -13,14 +13,17 @@
   ],
   "repository": "github:musakui/gl-canvas",
   "main": "gl-canvas.js",
-  "module": "build/gl-canvas.esm.js",
+  "module": "dist/gl-canvas.esm.js",
+  "browser": "dist/gl-canvas.min.js",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
     "dev": "rollup --config --watch",
     "lint": "eslint ./src",
-    "build": "rollup --config"
+    "build": "rollup --config",
+    "prepare": "npm run build",
+    "predeploy": "npm run build"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

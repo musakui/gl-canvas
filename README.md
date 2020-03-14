@@ -1,5 +1,5 @@
 # gl-canvas
-[![Published on NPM](https://img.shields.io/npm/v/gl-canvas.svg)](https://www.npmjs.com/package/musakui/gl-canvas) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/gl-canvas/elements/gl-canvas)
+[![Published on NPM](https://img.shields.io/npm/v/gl-canvas.svg)](https://www.npmjs.com/package/gl-canvas) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/gl-canvas/elements/gl-canvas)
 
 `<gl-canvas>` is a wrapper around `<canvas>` that handles the WebGL context and various events.
 
@@ -24,7 +24,7 @@ npm install gl-canvas
 ```
 
 ## Features
-- Set WebGL context attributes with HTML attributes
+- Set [WebGL context attributes](https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.2) with HTML attributes
 - Viewport automatically resizes with element (using `ResizeObserver`)
 
 ## Contributing

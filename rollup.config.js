@@ -3,16 +3,33 @@ import pkg from './package.json'
 import { eslint } from 'rollup-plugin-eslint'
 import { terser } from 'rollup-plugin-terser'
 
+const lint = eslint({
+  throwOnError: true,
+  throwOnWarning: true,
+})
+
 export default [
-	{
-		input: 'gl-canvas.js',
+  {
+    input: pkg.main,
     plugins: [
-      eslint({ throwOnError: true }),
+      lint,
+      terser({
+        ecma: 2018,
+        module: true,
+      }),
+    ],
+    output: [
+      { format: 'esm', file: pkg.module },
+    ]
+  },
+  {
+    input: pkg.main,
+    plugins: [
+      lint,
       terser(),
     ],
-		output: [
-			{ format: 'esm', file: pkg.module },
-			{ format: 'cjs', file: 'build/gl-canvas.min.js' },
-		]
-	}
+    output: [
+      { format: 'cjs', file: pkg.browser },
+    ]
+  },
 ]
