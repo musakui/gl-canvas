@@ -1,3 +1,5 @@
+/** @license MIT License. Copyright (c) 2020 むさくい */
+
 const STYLE = `
 :host([hidden]) { display: none }
 :host, canvas {
@@ -212,6 +214,7 @@ export class GLCanvasBase extends HTMLElement {
 
   /**
    * Run when connected and when the context is restored.
+   * Will not be called if WebGL context creation failed.
    */
   setupCallback (restored) {
   }
@@ -223,7 +226,7 @@ export class GLCanvasBase extends HTMLElement {
   }
 
   /**
-   * Run when the element is resized. Can be cancelled.
+   * Run when the element is resized, after the canvas size is set.
    */
   resizedCallback (rect) {
   }

@@ -8,28 +8,47 @@ const lint = eslint({
   throwOnWarning: true,
 })
 
+const minify = terser()
+
+const minifyModule = terser({
+  ecma: 2018,
+  module: true,
+})
+
+function generate ({ input, module, browser }) {
+  return [
+    {
+      input,
+      plugins: [
+        lint,
+        minifyModule,
+      ],
+      output: [ { format: 'esm', file: module } ]
+    },
+    {
+      input,
+      plugins: [
+        lint,
+        minify,
+      ],
+      output: [ { format: 'cjs', file: browser } ]
+    },
+  ]
+}
+
+const outputs = [
+  {
+    input: pkg.main,
+    module: 'dist/gl-canvas-full.esm.js',
+    browser: 'dist/gl-canvas-full.min.js',
+  },
+  {
+    input: 'src/gl-canvas.js',
+    module: pkg.module,
+    browser: pkg.browser,
+  },
+]
+
 export default [
-  {
-    input: pkg.main,
-    plugins: [
-      lint,
-      terser({
-        ecma: 2018,
-        module: true,
-      }),
-    ],
-    output: [
-      { format: 'esm', file: pkg.module },
-    ]
-  },
-  {
-    input: pkg.main,
-    plugins: [
-      lint,
-      terser(),
-    ],
-    output: [
-      { format: 'cjs', file: pkg.browser },
-    ]
-  },
+  ...[].concat(...outputs.map(generate)),
 ]

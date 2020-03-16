@@ -1,7 +1,7 @@
 {
   "name": "gl-canvas",
   "version": "0.2.0",
-  "description": " A custom element wrapper around <canvas>",
+  "description": "Custom Element for <canvas> and WebGL",
   "license": "MIT",
   "author": "Shun Git",
   "keywords": [
@@ -11,11 +11,13 @@
     "webcomponents",
     "web-components"
   ],
+  "homepage": "https://musakui.github.io/gl-canvas/",
   "repository": "github:musakui/gl-canvas",
-  "main": "gl-canvas.js",
+  "main": "src/index.js",
   "module": "dist/gl-canvas.esm.js",
   "browser": "dist/gl-canvas.min.js",
   "files": [
+    "src",
     "dist"
   ],
   "scripts": {

@@ -1,4 +1,4 @@
-import { GLCanvasBase } from './src/base.js'
+import { GLCanvasBase } from './base.js'
 
 /**
  * `<gl-canvas>` is a wrapper around `<canvas>` that handles the WebGL context and various events.
@@ -6,6 +6,7 @@ import { GLCanvasBase } from './src/base.js'
 export class GLCanvas extends GLCanvasBase {
   /**
    * Run setup code and initialize draw function.
+   * @private
    */
   setupCallback (restored) {
     if (this.gl === null || !this._setup) { return }
@@ -17,9 +18,9 @@ export class GLCanvas extends GLCanvasBase {
 
   /*
    * Sets viewport bounds to match canvas.
+   * @private
    */
   resizedCallback (rect) {
-    super.resizedCallback()
     if (!this._contextLost) {
       this.gl.viewport(0, 0, rect.width, rect.height)
     }
