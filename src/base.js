@@ -1,12 +1,4 @@
-/** @license MIT License. Copyright (c) 2020 むさくい */
-
-const STYLE = `
-:host([hidden]) { display: none }
-:host, canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}`
+/** @license MIT. Copyright (c) 2020 musakui */
 
 export class GLCanvasBase extends HTMLElement {
   /**
@@ -17,7 +9,7 @@ export class GLCanvasBase extends HTMLElement {
     super()
 
     this._gl = null
-    this._contextLost = false
+    this._contextLost = null
 
     this._pixelRatio = window.devicePixelRatio
     this._contextAttrs = contextAttributes || {}
@@ -33,12 +25,8 @@ export class GLCanvasBase extends HTMLElement {
       this.setupCallback(true)
     }
 
-    this._canvas = document.createElement('canvas')
-
     const shadow = this.attachShadow({ mode: 'closed' })
-    shadow.appendChild(this.constructor.style)
-    shadow.appendChild(this._canvas)
-
+    this._canvas = this.constructor.populateShadow(shadow)
     this._shadowRoot = shadow
   }
 
@@ -53,14 +41,6 @@ export class GLCanvasBase extends HTMLElement {
       preserveDrawingBuffer: 'preserve-buffer',
       failIfMajorPerformanceCaveat: 'require-performance',
     }
-  }
-
-  static get style () {
-    if (!this._style) {
-      this._style = document.createElement('style')
-      this._style.textContent = STYLE
-    }
-    return this._style
   }
 
   static get resizeObserver () {
@@ -78,6 +58,26 @@ export class GLCanvasBase extends HTMLElement {
       })
     }
     return this._resizeObserver
+  }
+
+  static get style () {
+    return ''
+  }
+
+  static populateShadow (shadow) {
+    const canvas = document.createElement('canvas')
+
+    if (this.style instanceof Element) {
+      shadow.appendChild(this.style)
+    } else if (this.style) {
+      const el = document.createElement('style')
+      el.textContent = this.style
+      shadow.appendChild(el)
+    }
+
+    shadow.appendChild(canvas)
+
+    return canvas
   }
 
   /**
@@ -161,6 +161,30 @@ export class GLCanvasBase extends HTMLElement {
   }
 
   /**
+   * Gets the WebGL context. Returns false if unsuccessful
+   * @private
+   */
+  _getContext () {
+    if (this._gl !== null) {
+      return true
+    }
+
+    const contextType = this.getAttribute('type') || 'webgl'
+
+    if (Object.keys(this._contextAttrs).length === 0) {
+      Object.assign(this._contextAttrs, this._parseContextAttrs())
+    }
+
+    const gl = this._canvas.getContext(contextType, Object.freeze(this._contextAttrs))
+    if (gl === null) {
+      return false
+    }
+
+    this._gl = gl
+    return true
+  }
+
+  /**
    * Update the canvas size.
    * @private
    */
@@ -183,13 +207,8 @@ export class GLCanvasBase extends HTMLElement {
    * Create WebGL context and setup event listeners.
    */
   connectedCallback () {
-    const contextType = this.getAttribute('type') || 'webgl'
+    if (!this._getContext()) { return }
 
-    this._contextAttrs = Object.assign(this._parseContextAttrs(), this._contextAttrs)
-    const gl = this._canvas.getContext(contextType, Object.freeze(this._contextAttrs))
-    if (gl === null) { return }
-
-    this._gl = gl
     this.constructor.resizeObserver.observe(this)
     this._canvas.addEventListener('webglcontextlost', this._ctxLost)
     this._canvas.addEventListener('webglcontextrestored', this._ctxRestored)
