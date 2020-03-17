@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:null">
+  <title>GLCanvas Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script type="module" src="dist/gl-canvas.esm.js"></script>
+  <script id="vs" type="text/plain">attribute vec4 pos;void main(){gl_Position=pos;}</script>
+  <script id="fs" type="text/plain">
+precision mediump float; uniform float time; uniform vec2 size;
+void main(){
+  vec2 c = gl_FragCoord.xy / size;
+  gl_FragColor = vec4(c.s, c.t, sin(time) * .5 + .5, 1.);
+}
+  </script>
+ </head>
+ <body style="margin:0px">
+  <gl-canvas id="glc" style="height:100vh;"></gl-canvas>
+  <script type="module">
+import * as tg from 'https://twgljs.org/dist/4.x/twgl-full.module.js'
+
+const pos = [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0]
+
+function setupGL (gl) {
+  const info = tg.createProgramInfo(gl, ['vs', 'fs'])
+  const buffers = tg.createBufferInfoFromArrays(gl, { pos })
+  tg.setBuffersAndAttributes(gl, info, buffers)
+  gl.useProgram(info.program)
+
+  // return draw function
+  return function (uniforms) {
+    tg.setUniforms(info, uniforms)
+    tg.drawBufferInfo(gl, buffers)
+  }
+}
+
+const canvas = document.querySelector('#glc')
+
+// width and height from canvas
+let size = [canvas.width, canvas.height]
+
+// setup WebGL program and buffers
+canvas.init(setupGL)
+
+// listen to resize event
+canvas.addEventListener('resize', ({ detail }) => {
+  size = [detail.width, detail.height]
+})
+
+function animate (t) {
+  // arguments are passed to draw function
+  canvas.draw({ time: t * 0.001, size })
+
+  requestAnimationFrame(animate)
+}
+
+animate()
+  </script>
+ </body>
+</html>

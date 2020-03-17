@@ -3,6 +3,8 @@ import pkg from './package.json'
 import { eslint } from 'rollup-plugin-eslint'
 import { terser } from 'rollup-plugin-terser'
 
+const outputDir = 'docs/'
+
 const lint = eslint({
   throwOnError: true,
   throwOnWarning: true,
@@ -23,7 +25,10 @@ function generate ({ input, module, browser }) {
         lint,
         minifyModule,
       ],
-      output: [ { format: 'esm', file: module } ]
+      output: {
+        format: 'esm',
+        file: outputDir + module,
+      },
     },
     {
       input,
@@ -31,7 +36,10 @@ function generate ({ input, module, browser }) {
         lint,
         minify,
       ],
-      output: [ { format: 'cjs', file: browser } ]
+      output: {
+        format: 'cjs',
+        file: outputDir + browser
+      },
     },
   ]
 }
