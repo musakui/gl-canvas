@@ -1,6 +1,6 @@
 {
   "name": "gl-canvas",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Custom Element for <canvas> and WebGL",
   "license": "MIT",
   "author": "Shun Git",
