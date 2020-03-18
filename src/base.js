@@ -49,9 +49,9 @@ export class GLCanvasBase extends HTMLElement {
         for (const entry of entries) {
           const target = entry.target
           const detail = entry.contentRect
+          target._updateSize(detail)
           const evt = new CustomEvent('resize', { detail, cancelable: true })
           if (target.dispatchEvent(evt)) {
-            target._updateSize(detail)
             target.resizedCallback(detail)
           }
         }
@@ -194,10 +194,7 @@ export class GLCanvasBase extends HTMLElement {
     const width = Math.floor(rw * this.pixelRatio)
     const height = Math.floor(rh * this.pixelRatio)
 
-    const oldWidth = this._canvas.width
-    const oldHeight = this._canvas.height
-
-    if (force || oldWidth !== width || oldHeight !== height) {
+    if (force || this.width !== width || this.height !== height) {
       this._canvas.width = width
       this._canvas.height = height
     }
@@ -209,7 +206,9 @@ export class GLCanvasBase extends HTMLElement {
   connectedCallback () {
     if (!this._getContext()) { return }
 
+    this._updateSize({}, true)
     this.constructor.resizeObserver.observe(this)
+
     this._canvas.addEventListener('webglcontextlost', this._ctxLost)
     this._canvas.addEventListener('webglcontextrestored', this._ctxRestored)
 

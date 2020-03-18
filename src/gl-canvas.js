@@ -32,9 +32,9 @@ export class GLCanvas extends GLCanvasBase {
    * Sets viewport bounds to match canvas.
    * @private
    */
-  resizedCallback (rect) {
+  resizedCallback () {
     if (!this._contextLost) {
-      this.gl.viewport(0, 0, rect.width, rect.height)
+      this.gl.viewport(0, 0, this.width, this.height)
     }
   }
 

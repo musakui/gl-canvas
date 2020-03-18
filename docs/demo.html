@@ -44,8 +44,8 @@ let size = [canvas.width, canvas.height]
 canvas.init(setupGL)
 
 // listen to resize event
-canvas.addEventListener('resize', ({ detail }) => {
-  size = [detail.width, detail.height]
+canvas.addEventListener('resize', () => {
+  size = [canvas.width, canvas.height]
 })
 
 function animate (t) {
