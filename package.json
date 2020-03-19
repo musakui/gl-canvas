@@ -25,10 +25,16 @@
     "lint": "eslint ./src",
     "build": "rollup --config",
     "docs:stage": "surge --domain $npm_package_name.surge.sh docs",
+    "predistdocs": "git update-index --no-skip-worktree $npm_package_config_distdocs",
+    "distdocs": "git add -f $npm_package_config_distdocs",
+    "postdistdocs": "git update-index --skip-worktree $npm_package_config_distdocs",
     "preversion": "npm run build",
-    "version": "git add -f docs/dist",
+    "version": "npm run distdocs",
     "prepack": "rm -rf dist && cp -r docs/dist dist",
     "postpack": "rm -rf dist"
+  },
+  "config": {
+    "distdocs": "docs/dist/*"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

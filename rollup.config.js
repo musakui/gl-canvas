@@ -37,7 +37,8 @@ function generate ({ input, module, browser }) {
         minify,
       ],
       output: {
-        format: 'cjs',
+        format: 'umd',
+        name: 'GLCanvas',
         file: outputDir + browser
       },
     },
