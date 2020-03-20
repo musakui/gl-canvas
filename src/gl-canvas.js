@@ -1,21 +1,9 @@
 import { GLCanvasBase } from './base.js'
 
-const STYLE = `
-:host([hidden]) { display: none }
-:host, canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}`
-
 /**
- * `<gl-canvas>` is a wrapper around `<canvas>` that handles the WebGL context and various events.
+ * `<gl-canvas>` extends `<canvas>` with handlers for the WebGL context and various events.
  */
 export class GLCanvas extends GLCanvasBase {
-  static get style () {
-    return STYLE
-  }
-
   /**
    * Run setup code and initialize draw function.
    * @private
@@ -25,16 +13,6 @@ export class GLCanvas extends GLCanvasBase {
     const draw = this._setup(this.gl, restored)
     if (draw === null || typeof draw === 'function') {
       this._draw = draw
-    }
-  }
-
-  /*
-   * Sets viewport bounds to match canvas.
-   * @private
-   */
-  resizedCallback () {
-    if (!this._contextLost) {
-      this.gl.viewport(0, 0, this.width, this.height)
     }
   }
 

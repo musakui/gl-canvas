@@ -1,5 +1,13 @@
 /** @license MIT. Copyright (c) 2020 musakui */
 
+const BASE_STYLE = `
+:host([hidden]) { display: none }
+:host, canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}`
+
 export class GLCanvasBase extends HTMLElement {
   /**
    * Setup Shadow DOM.
@@ -61,7 +69,7 @@ export class GLCanvasBase extends HTMLElement {
   }
 
   static get style () {
-    return ''
+    return BASE_STYLE
   }
 
   static populateShadow (shadow) {
@@ -245,8 +253,12 @@ export class GLCanvasBase extends HTMLElement {
 
   /**
    * Run when the element is resized, after the canvas size is set.
+   * Sets viewport bounds to match canvas size by default.
    */
   resizedCallback (rect) {
+    if (!this._contextLost) {
+      this.gl.viewport(0, 0, this.width, this.height)
+    }
   }
 
   /**
