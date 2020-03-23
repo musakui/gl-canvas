@@ -56,6 +56,11 @@ const outputs = [
     module: pkg.module,
     browser: pkg.browser,
   },
+  {
+    input: 'src/gl-shadertoy.js',
+    module: 'dist/gl-shadertoy.esm.js',
+    browser: 'dist/gl-shadertoy.min.js',
+  },
 ]
 
 export default [
