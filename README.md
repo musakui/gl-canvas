@@ -8,7 +8,7 @@
 
 ### in HTML
 ```htmlmixed
-<script type="module" src="gl-canvas.esm.js"></script>
+<script type="module" src="https://esm.run/gl-canvas/gl-canvas"></script>
 <gl-canvas></gl-canvas>
 ```
 
